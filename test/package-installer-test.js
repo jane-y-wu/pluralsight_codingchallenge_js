@@ -11,13 +11,26 @@ describe('different types of outputs', function() {
 
 	describe('correct input', function() {
 
-		var correctInput = ['KittenService: ','Leetmeme: Cyberportal','Cyberportal: Ice','CamelCaser: KittenService','Fraudstream: Leetmeme','Ice: '];
-		var correctOutput = 'KittenService, Ice, Cyberportal, Leetmeme, CamelCaser, Fraudstream';
-
 		it('should return correct output', function(done) {
+
+			var correctInput = ['KittenService: ','Leetmeme: Cyberportal','Cyberportal: Ice','CamelCaser: KittenService','Fraudstream: Leetmeme','Ice: '];
+			var correctOutput = 'KittenService, Ice, Cyberportal, Leetmeme, CamelCaser, Fraudstream';
+
 			var result = packageInstaller.getInstallationList(correctInput);
 			result.should.be.equal(correctOutput);
 			done();
+
+		})
+
+		it('should return correct output', function(done) {
+
+			var correctInput = ['A: B','C: D','D: E'];
+			var correctOutput = 'B, A, E, D, C';
+
+			var result = packageInstaller.getInstallationList(correctInput);
+			result.should.be.equal(correctOutput);
+			done();
+			
 		})
 
 	})
@@ -46,12 +59,36 @@ describe('different types of outputs', function() {
 	})
 
 	describe('invalid argument', function() {
-
-		it('should throw invalid argument exception', function(done) {
+		
+		it('should throw invalid argument exception from null input', function(done) {
 			should(function() {packageInstaller.getInstallationList(null)}).throw('Invalid Argument');
 			done();
 		})
-		
+
+		it('should throw invalid argument exception from extra colon', function(done) {
+
+			var extraColonInput = ['KittenService: ','Leetmeme:: Cyberportal','Cyberportal: Ice'];
+
+			should(function() {packageInstaller.getInstallationList(extraColonInput)}).throw('Invalid Argument');
+			done();
+		})
+
+		it('should throw invalid argument exception from no colon', function(done) {
+
+			var noColonInput = ['KittenService: ','Leetmeme Cyberportal','Cyberportal: Ice'];
+
+			should(function() {packageInstaller.getInstallationList(noColonInput)}).throw('Invalid Argument');
+			done();
+		})
+
+		it('should throw invalid argument exception from no space', function(done) {
+
+			var noSpaceInput = ['KittenService: ','Leetmeme:Cyberportal','Cyberportal: Ice'];
+
+			should(function() {packageInstaller.getInstallationList(noSpaceInput)}).throw('Invalid Argument');
+			done();
+		})
+
 	})
 
 })
