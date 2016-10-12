@@ -1,14 +1,7 @@
 var should = require('should');
 var PackageInstaller = require('../lib/package-installer');
 
-var correctInput = ['KittenService: ','Leetmeme: Cyberportal','Cyberportal: Ice','CamelCaser: KittenService','Fraudstream: Leetmeme','Ice: '];
-var circularInput = ['KittenService: ','Leetmeme: Cyberportal','Cyberportal: Ice','CamelCaser: KittenService','Fraudstream: ','Ice: Leetmeme'];
-var emptyInput = [];
-
-var correctOutput = 'KittenService, Ice, Cyberportal, Leetmeme, CamelCaser, Fraudstream';
-
 var packageInstaller;
-
 
 describe('different types of outputs', function() {
 
@@ -17,6 +10,9 @@ describe('different types of outputs', function() {
 	})
 
 	describe('correct input', function() {
+
+		var correctInput = ['KittenService: ','Leetmeme: Cyberportal','Cyberportal: Ice','CamelCaser: KittenService','Fraudstream: Leetmeme','Ice: '];
+		var correctOutput = 'KittenService, Ice, Cyberportal, Leetmeme, CamelCaser, Fraudstream';
 
 		it('should return correct output', function(done) {
 			var result = packageInstaller.getInstallationList(correctInput);
@@ -27,6 +23,8 @@ describe('different types of outputs', function() {
 	})
 
 	describe('empty input', function() {
+		
+		var emptyInput = [];
 
 		it('should return an empty string', function(done) {
 			var result = packageInstaller.getInstallationList(emptyInput);
@@ -38,10 +36,13 @@ describe('different types of outputs', function() {
 
 	describe('circular input', function() {
 
+		var circularInput = ['KittenService: ','Leetmeme: Cyberportal','Cyberportal: Ice','CamelCaser: KittenService','Fraudstream: ','Ice: Leetmeme'];
+		
 		it('should throw an exception', function(done) {
 			should(function() {packageInstaller.getInstallationList(circularInput)}).throw('Found Circular Dependencies');
 			done();
 		})
+
 	})
 
 	describe('invalid argument', function() {
@@ -50,6 +51,7 @@ describe('different types of outputs', function() {
 			should(function() {packageInstaller.getInstallationList(null)}).throw('Invalid Argument');
 			done();
 		})
+		
 	})
 
 })
