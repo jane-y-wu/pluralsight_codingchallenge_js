@@ -30,7 +30,7 @@ describe('different types of outputs', function() {
 			var result = packageInstaller.getInstallationList(correctInput);
 			result.should.be.equal(correctOutput);
 			done();
-			
+
 		})
 
 	})
@@ -49,9 +49,26 @@ describe('different types of outputs', function() {
 
 	describe('circular input', function() {
 
-		var circularInput = ['KittenService: ','Leetmeme: Cyberportal','Cyberportal: Ice','CamelCaser: KittenService','Fraudstream: ','Ice: Leetmeme'];
-		
 		it('should throw an exception', function(done) {
+
+			var circularInput = ['KittenService: ','Leetmeme: Cyberportal','Cyberportal: Ice','CamelCaser: KittenService','Fraudstream: ','Ice: Leetmeme'];
+
+			should(function() {packageInstaller.getInstallationList(circularInput)}).throw('Found Circular Dependencies');
+			done();
+		})
+
+		it('should throw an exception', function(done) {
+
+			var circularInput = ['A: B', 'B: A'];
+
+			should(function() {packageInstaller.getInstallationList(circularInput)}).throw('Found Circular Dependencies');
+			done();
+		})
+
+		it('should throw an exception', function(done) {
+
+			var circularInput = ['A: B', 'B: C', 'C: A'];
+
 			should(function() {packageInstaller.getInstallationList(circularInput)}).throw('Found Circular Dependencies');
 			done();
 		})
@@ -86,6 +103,14 @@ describe('different types of outputs', function() {
 			var noSpaceInput = ['KittenService: ','Leetmeme:Cyberportal','Cyberportal: Ice'];
 
 			should(function() {packageInstaller.getInstallationList(noSpaceInput)}).throw('Invalid Argument');
+			done();
+		})
+
+		it('should throw invalid argument exception because there is no dependent before dependency', function(done) {
+
+			var noDependentInput = [' : KittenService','Leetmeme: Cyberportal','Cyberportal: Ice'];
+
+			should(function() {packageInstaller.getInstallationList(noDependentInput)}).throw('Invalid Argument');
 			done();
 		})
 
