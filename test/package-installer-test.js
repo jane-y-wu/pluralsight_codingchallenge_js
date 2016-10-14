@@ -157,7 +157,7 @@ describe('different types of outputs', function() {
 
 		it('should throw invalid argument exception from extra colon', function(done) {
 
-			var extraColonInput = ['KittenService: ','Leetmeme:: Cyberportal','Cyberportal: Ice'];
+			var extraColonInput = ['KittenService: ','Leetmeme: : Cyberportal','Cyberportal: Ice'];
 
 			should(function() {packageInstaller.getInstallationList(extraColonInput)}).throw('Invalid Argument: bad format');
 			done();
@@ -167,7 +167,7 @@ describe('different types of outputs', function() {
 
 			var noColonInput = ['KittenService: ','Leetmeme Cyberportal','Cyberportal: Ice'];
 
-			should(function() {packageInstaller.getInstallationList(noColonInput)}).throw('Invalid Argument: bad argument');
+			should(function() {packageInstaller.getInstallationList(noColonInput)}).throw('Invalid Argument: bad format');
 			done();
 		})
 
@@ -184,6 +184,30 @@ describe('different types of outputs', function() {
 			var noDependentInput = [' : KittenService','Leetmeme: Cyberportal','Cyberportal: Ice'];
 
 			should(function() {packageInstaller.getInstallationList(noDependentInput)}).throw('Invalid Argument: bad format');
+			done();
+		})
+
+		it('should throw invalid argument exception if dependent and dependency are the same', function(done) {
+
+			var samePairInput = ['KittenService: KittenService'];
+
+			should(function() {packageInstaller.getInstallationList(samePairInput)}).throw('Invalid Argument: bad format');
+			done();
+		})
+
+		it('should throw invalid argument exception if there is singular element without colon', function(done) {
+
+			var singularInput = ['KittenService'];
+
+			should(function() {packageInstaller.getInstallationList(singularInput)}).throw('Invalid Argument: bad format');
+			done();
+		})
+
+		it('should throw invalid argument exception if there is singular element without colon', function(done) {
+
+			var notStringInput = [5];
+
+			should(function() {packageInstaller.getInstallationList(notStringInput)}).throw('Invalid Argument: bad format');
 			done();
 		})
 
