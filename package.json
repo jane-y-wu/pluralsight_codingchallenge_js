@@ -1,0 +1,21 @@
+{
+  "author": {
+    "name": "Jane Wu",
+    "email": "jannee.wu@gmail.com"
+  },
+  "name": "pluralsight_installerchallenge",
+  "version": "0.0.1",
+  "description": "Program that outputs a string of packages, in order of installation so all dependencies come before dependent packages",
+  "main": "package-installer.js",
+  "scripts": {
+    "test": "mocha test/package-installer-test.js"
+  },
+  "dependencies": {
+    "mocha": "^3.1.2",
+    "should": "^11.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jane-y-wu/pluralsight_codingchallenge_js.git"
+  }
+}
