@@ -203,7 +203,7 @@ describe('different types of outputs', function() {
 			done();
 		})
 
-		it('should throw invalid argument exception if there is singular element without colon', function(done) {
+		it('should throw invalid argument exception if element is not a string', function(done) {
 
 			var notStringInput = [5];
 
