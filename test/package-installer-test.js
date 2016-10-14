@@ -33,6 +33,72 @@ describe('different types of outputs', function() {
 
 		})
 
+		it ('should return correct output for single package', function(done) {
+
+			var correctInput = ['A: '];
+			var correctOutput = 'A';
+
+			var result = packageInstaller.getInstallationList(correctInput);
+			result.should.be.equal(correctOutput);
+			done();
+
+		})
+
+		it ('should return correct output for single pairing', function(done) {
+
+			var correctInput = ['A: B'];
+			var correctOutput = 'B, A';
+
+			var result = packageInstaller.getInstallationList(correctInput);
+			result.should.be.equal(correctOutput);
+			done();
+
+		})
+
+		it ('should return correct output for redundant pairing', function(done) {
+
+			var correctInput = ['A: B', 'A: B', 'A: B', 'A: B'];
+			var correctOutput = 'B, A';
+
+			var result = packageInstaller.getInstallationList(correctInput);
+			result.should.be.equal(correctOutput);
+			done();
+
+		})
+
+		it ('should return correct output for multiple dependencies', function(done) {
+
+			var correctInput = ['A: B', 'A: C'];
+			var correctOutput = 'B, C, A';
+
+			var result = packageInstaller.getInstallationList(correctInput);
+			result.should.be.equal(correctOutput);
+			done();
+
+		})
+
+		it('should return correct output even with extra spaces', function(done) {
+
+			var correctInput = ['A: B','C:  D','D : E'];
+			var correctOutput = 'B, A, E, D, C';
+
+			var result = packageInstaller.getInstallationList(correctInput);
+			result.should.be.equal(correctOutput);
+			done();
+
+		})
+
+		it('should return correct output for extremely long package list', function(done) {
+
+			var correctInput = ['C: D','A: B','D: E','A: B','A: C','A: ','E: F','F: G','B: C','A: Z','F: Y','E: W', 'S: T', 'M: N'];
+			var correctOutput = 'G, Y, F, W, E, D, C, B, Z, A, T, S, N, M';
+
+			var result = packageInstaller.getInstallationList(correctInput);
+			result.should.be.equal(correctOutput);
+			done();
+
+		})
+
 	})
 
 	describe('empty input', function() {
@@ -49,7 +115,7 @@ describe('different types of outputs', function() {
 
 	describe('circular input', function() {
 
-		it('should throw an exception', function(done) {
+		it('should throw an exception for example circular input', function(done) {
 
 			var circularInput = ['KittenService: ','Leetmeme: Cyberportal','Cyberportal: Ice','CamelCaser: KittenService','Fraudstream: ','Ice: Leetmeme'];
 
@@ -57,7 +123,7 @@ describe('different types of outputs', function() {
 			done();
 		})
 
-		it('should throw an exception', function(done) {
+		it('should throw an exception for two packages that depend on each other', function(done) {
 
 			var circularInput = ['A: B', 'B: A'];
 
@@ -65,9 +131,16 @@ describe('different types of outputs', function() {
 			done();
 		})
 
-		it('should throw an exception', function(done) {
+		it('should throw an exception for three-way circular dependency', function(done) {
 
 			var circularInput = ['A: B', 'B: C', 'C: A'];
+
+			should(function() {packageInstaller.getInstallationList(circularInput)}).throw('Found Circular Dependencies');
+			done();
+		})
+
+		it('should throw an exception for long list with cirular dependencies', function(done) {
+			var circularInput = ['A: B','B: C','C: D','D: E','E: F','F: B'];
 
 			should(function() {packageInstaller.getInstallationList(circularInput)}).throw('Found Circular Dependencies');
 			done();
@@ -86,7 +159,7 @@ describe('different types of outputs', function() {
 
 			var extraColonInput = ['KittenService: ','Leetmeme:: Cyberportal','Cyberportal: Ice'];
 
-			should(function() {packageInstaller.getInstallationList(extraColonInput)}).throw('Invalid Argument');
+			should(function() {packageInstaller.getInstallationList(extraColonInput)}).throw('Invalid Argument: bad format');
 			done();
 		})
 
@@ -94,7 +167,7 @@ describe('different types of outputs', function() {
 
 			var noColonInput = ['KittenService: ','Leetmeme Cyberportal','Cyberportal: Ice'];
 
-			should(function() {packageInstaller.getInstallationList(noColonInput)}).throw('Invalid Argument');
+			should(function() {packageInstaller.getInstallationList(noColonInput)}).throw('Invalid Argument: bad argument');
 			done();
 		})
 
@@ -102,7 +175,7 @@ describe('different types of outputs', function() {
 
 			var noSpaceInput = ['KittenService: ','Leetmeme:Cyberportal','Cyberportal: Ice'];
 
-			should(function() {packageInstaller.getInstallationList(noSpaceInput)}).throw('Invalid Argument');
+			should(function() {packageInstaller.getInstallationList(noSpaceInput)}).throw('Invalid Argument: bad format');
 			done();
 		})
 
@@ -110,7 +183,7 @@ describe('different types of outputs', function() {
 
 			var noDependentInput = [' : KittenService','Leetmeme: Cyberportal','Cyberportal: Ice'];
 
-			should(function() {packageInstaller.getInstallationList(noDependentInput)}).throw('Invalid Argument');
+			should(function() {packageInstaller.getInstallationList(noDependentInput)}).throw('Invalid Argument: bad format');
 			done();
 		})
 
