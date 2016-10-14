@@ -207,7 +207,7 @@ describe('different types of outputs', function() {
 
 			var notStringInput = [5];
 
-			should(function() {packageInstaller.getInstallationList(notStringInput)}).throw('Invalid Argument: bad format');
+			should(function() {packageInstaller.getInstallationList(notStringInput)}).throw('Invalid Argument: not a string');
 			done();
 		})
 
