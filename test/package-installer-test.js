@@ -191,7 +191,7 @@ describe('different types of outputs', function() {
 
 			var samePairInput = ['KittenService: KittenService'];
 
-			should(function() {packageInstaller.getInstallationList(samePairInput)}).throw('Invalid Argument: bad format');
+			should(function() {packageInstaller.getInstallationList(samePairInput)}).throw('Invalid Argument: dependent and dependency are the same');
 			done();
 		})
 
